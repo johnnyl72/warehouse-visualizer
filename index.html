@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Warehouse Digital Twin — Wireframes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f0eee9;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #171717;
+        -webkit-font-smoothing: antialiased;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      /* ── wireframe palette ──────────────────────────────────────── */
+      :root {
+        --wf-bg: #fbfaf8;
+        --wf-panel: #ffffff;
+        --wf-line: #e4e2dd;
+        --wf-line-2: #d8d5ce;
+        --wf-ink: #1c1b18;
+        --wf-ink-2: #4a4844;
+        --wf-mute: #8b8780;
+        --wf-mute-2: #b8b4ac;
+        --wf-tint: #f4f2ee;
+        --wf-tint-2: #ecebe5;
+
+        /* status — muted traffic light */
+        --wf-ok: #46945a;
+        --wf-ok-bg: #e6efd9;
+        --wf-warn: #c98a1f;
+        --wf-warn-bg: #f6eccd;
+        --wf-bad: #c0463a;
+        --wf-bad-bg: #f1d6cf;
+
+        --wf-radius: 10px;
+        --wf-radius-sm: 6px;
+      }
+
+      /* annotation post-it style (handwritten) */
+      .wf-note {
+        font-family: 'Caveat', cursive;
+        font-weight: 600;
+      }
+
+      /* monospace ids / tokens */
+      .wf-mono {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+      }
+
+      /* artboard chrome — every artboard sits in a frame that gives it
+         a real-app feel: sidebar + topbar + content area. */
+      .wf-frame {
+        width: 100%;
+        height: 100%;
+        background: var(--wf-bg);
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        grid-template-rows: 56px 1fr;
+        overflow: hidden;
+        color: var(--wf-ink);
+        font-size: 13px;
+      }
+      .wf-frame--no-top {
+        grid-template-rows: 1fr;
+      }
+      .wf-frame--no-side {
+        grid-template-columns: 1fr;
+      }
+
+      .wf-side {
+        grid-row: 1 / span 2;
+        background: #f5f3ef;
+        border-right: 1px solid var(--wf-line);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 14px 0;
+        gap: 6px;
+      }
+      .wf-side__logo {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #1c1b18;
+        color: #fbfaf8;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 13px;
+        margin-bottom: 14px;
+      }
+      .wf-side__btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        color: var(--wf-ink-2);
+        cursor: pointer;
+        position: relative;
+      }
+      .wf-side__btn.is-active {
+        background: #ffffff;
+        color: var(--wf-ink);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), inset 0 0 0 1px var(--wf-line);
+      }
+      .wf-side__spacer {
+        flex: 1;
+      }
+
+      .wf-top {
+        background: var(--wf-panel);
+        border-bottom: 1px solid var(--wf-line);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 18px;
+      }
+      .wf-top__crumb {
+        color: var(--wf-mute);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .wf-top__crumb b {
+        color: var(--wf-ink);
+        font-weight: 600;
+      }
+      .wf-top__spacer {
+        flex: 1;
+      }
+
+      /* primary content surface */
+      .wf-main {
+        position: relative;
+        overflow: hidden;
+        background: var(--wf-bg);
+      }
+
+      /* generic atoms */
+      .wf-card {
+        background: var(--wf-panel);
+        border: 1px solid var(--wf-line);
+        border-radius: var(--wf-radius);
+      }
+      .wf-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: var(--wf-tint);
+        color: var(--wf-ink-2);
+        font-size: 11px;
+        font-weight: 500;
+        border: 1px solid var(--wf-line);
+      }
+      .wf-pill--ok {
+        background: var(--wf-ok-bg);
+        color: var(--wf-ok);
+        border-color: transparent;
+      }
+      .wf-pill--warn {
+        background: var(--wf-warn-bg);
+        color: var(--wf-warn);
+        border-color: transparent;
+      }
+      .wf-pill--bad {
+        background: var(--wf-bad-bg);
+        color: var(--wf-bad);
+        border-color: transparent;
+      }
+
+      .wf-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: var(--wf-radius-sm);
+        border: 1px solid var(--wf-line-2);
+        background: #fff;
+        color: var(--wf-ink);
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .wf-btn--primary {
+        background: var(--wf-ink);
+        color: #fbfaf8;
+        border-color: var(--wf-ink);
+      }
+      .wf-btn--ghost {
+        border-color: transparent;
+        background: transparent;
+      }
+
+      /* segmented mode toggle Edit / Monitor */
+      .wf-mode {
+        display: inline-flex;
+        background: var(--wf-tint);
+        border: 1px solid var(--wf-line);
+        border-radius: 8px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .wf-mode__opt {
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--wf-mute);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .wf-mode__opt.is-on {
+        background: #fff;
+        color: var(--wf-ink);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+
+      /* generic placeholder image / chart placeholder */
+      .wf-placeholder {
+        background-image: repeating-linear-gradient(
+          135deg,
+          rgba(0, 0, 0, 0.04) 0 6px,
+          transparent 6px 12px
+        );
+        border: 1px dashed var(--wf-line-2);
+        border-radius: var(--wf-radius-sm);
+        color: var(--wf-mute);
+        display: grid;
+        place-items: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* shelf cell — used on warehouse maps */
+      .wf-shelf {
+        background: #cfccc4;
+        border-radius: 2px;
+      }
+      .wf-shelf--ok {
+        background: #8fb877;
+      }
+      .wf-shelf--warn {
+        background: #e3b85b;
+      }
+      .wf-shelf--bad {
+        background: #d77a6e;
+      }
+      .wf-shelf--idle {
+        background: #d4d2cb;
+      }
+      .wf-shelf--sel {
+        outline: 2px solid var(--wf-ink);
+        outline-offset: 1px;
+        z-index: 2;
+      }
+
+      /* small section dividers inside artboards */
+      .wf-hr {
+        border: 0;
+        border-top: 1px solid var(--wf-line);
+        margin: 0;
+      }
+
+      /* sketchy callout arrow */
+      .wf-callout {
+        position: absolute;
+        font-family: 'Caveat', cursive;
+        font-weight: 600;
+        color: #6b5a3a;
+        background: #fef4a8;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 16px;
+        transform: rotate(-2deg);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        z-index: 5;
+        line-height: 1.1;
+      }
+
+      /* utilities */
+      .wf-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .wf-col {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      /* canvas page header */
+      .page-header {
+        padding: 64px 60px 16px;
+        max-width: 1100px;
+      }
+      .page-header h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .page-header p {
+        margin: 0;
+        color: rgba(60, 50, 40, 0.7);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .page-header .meta {
+        margin-top: 18px;
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: rgba(60, 50, 40, 0.55);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      /* ── accessibility ─────────────────────────────────────────── */
+      :focus-visible {
+        outline: 2px solid var(--wf-ink);
+        outline-offset: 2px;
+        border-radius: 3px;
+      }
+      /* keyboard focus for the icon rail / tool buttons reads clearly
+         against their dark active state */
+      .wf-side__btn:focus-visible,
+      .is-active:focus-visible {
+        outline-color: #fbfaf8;
+        outline-offset: -3px;
+      }
+      /* native buttons reused as icon controls inherit the app's type
+         and shed the UA chrome */
+      button.wf-side__btn,
+      button.wf-mode__opt {
+        font: inherit;
+        border: 0;
+        background: transparent;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* live-data indicator pulse used in the top bar */
+      @keyframes wfPulse {
+        0%   { box-shadow: 0 0 0 0 rgba(70, 148, 90, 0.55); }
+        70%  { box-shadow: 0 0 0 6px rgba(70, 148, 90, 0);   }
+        100% { box-shadow: 0 0 0 0 rgba(70, 148, 90, 0);     }
+      }
+
+      /* zone card on the map — clickable mini summary tile */
+      .wf-zonecard {
+        background: var(--wf-panel);
+        border: 1px solid var(--wf-line);
+        border-radius: 8px;
+        padding: 8px 10px;
+        cursor: pointer;
+        transition: box-shadow 0.12s, border-color 0.12s, transform 0.12s;
+        text-align: left;
+        font: inherit;
+        color: var(--wf-ink);
+      }
+      .wf-zonecard:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+        border-color: var(--wf-line-2);
+      }
+      .wf-zonecard.is-active {
+        box-shadow: 0 0 0 2px var(--wf-ink) inset;
+      }
+      .wf-zonecard__title {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--wf-ink);
+      }
+      .wf-zonecard__meta {
+        font-size: 10px;
+        color: var(--wf-mute);
+        margin-top: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
